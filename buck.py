@@ -1,21 +1,8 @@
 """
 ref: https://d1d2qsbl8m0m72.cloudfront.net/en/products/databook/applinote/ic/power/switching_regulator/Buck_converter_efficiency_app-e.pdf
 """
-class Buck:
-    def compute_and_print_all(device: dict):
-        print('p_on_high:", self.p_on_high(device))
-        print('p_on_low:", self.p_on_low(device))
-        print('p_sw_h:", self.p_sw_h(device))
-        print('p_sw_l:", self.p_sw_l(device))
-        print('p_diode:", self.p_diode(device))
-        print('p_c_oss:", self.p_c_oss(device))
-        print('p_dead:", self.p_dead(device))
-        print('p_gate:", self.p_gate(device))
-        print('p_gate_alt:", self.p_gate_alt(device))
-        print('p_driver:", self.p_driver(device))
-        print('p_inductor:", self.p_inductor(device))
-        print('p_input_capacitor:", self.p_input_capacitor(device))
-        print('p_output_capacitor:", self.p_output_capacitor(device))
+class Buck():
+
 
 
     def p_on_high(device:dict):
@@ -174,3 +161,23 @@ class Buck:
         i_c_out_rms = d_il/(2 * (3)**(1/2))
         p = i_c_out_rms**2 * esr_c_out
         return p
+
+
+    def compute_and_print_all(device: dict):
+        print("name:", device.name)
+        print("p_on_high:", Buck.p_on_high(device))
+        print("p_on_low:", Buck.p_on_low(device))
+        print("p_sw_h:", Buck.p_sw_h(device))
+        print("p_sw_l:", Buck.p_sw_l(device))
+        print("p_diode:", Buck.p_diode(device))#low
+        print("p_c_oss:", Buck.p_c_oss(device))#hl
+        print("p_dead:", Buck.p_dead(device))#low
+        print("p_gate:", Buck.p_gate(device))#hl
+        print("p_sw_t_h:",  Buck.p_on_high(device)+Buck.p_sw_h(device)+Buck.p_c_oss(device)+Buck.p_gate(device))
+        print("p_sw_t_l:",  Buck.p_on_high(device)+Buck.p_sw_h(device)+Buck.p_c_oss(device)+Buck.p_gate(device)+Buck.p_diode(device)+Buck.p_dead(device))
+        print("p_gate_alt:", Buck.p_gate_alt(device))
+        print("p_driver:", Buck.p_driver(device))
+        print("p_inductor:", Buck.p_inductor(device))
+        print("p_input_capacitor:", Buck.p_input_capacitor(device))
+        print("p_output_capacitor:", Buck.p_output_capacitor(device))
+        print()
