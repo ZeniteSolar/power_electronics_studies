@@ -23,7 +23,7 @@ class mosfet():
     Pl = None
     Qrr = None
 
-    def tfu(this, ):
+    def tfu(this):
         def tfu1():
             return (this.converter.Udd - (this.Rds_on * this.converter.Id_on)) * this.Rg_on * this.Cgd1 / (this.Udr - this.Uplateau)
 
@@ -33,7 +33,7 @@ class mosfet():
         return (tfu1() + tfu2() ) / 2
 
 
-    def tru(this, ):
+    def tru(this):
         def tru1():
             return (this.converter.Udd - (this.Rds_on * this.converter.Id_on)) * this.Rg_off * this.Cgd1 / (this.Uplateau)
 
@@ -43,27 +43,27 @@ class mosfet():
         return (tru1() + tru2() ) / 2
 
 
-    def Pc(this, ) -> float:
+    def Pc(this) -> float:
         """ Pc = Rds_on * Id² """
         return this.Rds_on * this.converter.Id_rms**2
 
 
-    def Eon_M(this, ) -> float:
+    def Eon_M(this) -> float:
         """ Eon_M = Udd * ((Id_on * (tri + tfu) / 2) + Qrr) """
         return this.converter.Udd * ((this.converter.Id_on * (this.tri + this.tfu) / 2) + this.Qrr)
 
 
-    def Eoff_M(this, ) -> float:
+    def Eoff_M(this) -> float:
         """ Eoff_M = Udd * Id_off * (tru + tfi) / 2 """
         return this.converter.Udd * this.converter.Id_off * (this.tru + this.tfi) / 2
 
 
-    def Eon_D(this, ) -> float:
+    def Eon_D(this) -> float:
         """ Eon_D = Qrr * Udrr / 4, Udrr≃Udd """
         return this.Qrr * this.converter.Udd / 4
 
 
-    def Psw(this, ) -> float:
+    def Psw(this) -> float:
         """
         Psw_M = (Eon_M + Eoff_M) * fsw  -> mosfet
         Psw_D = (Eon_D + Eoff_D) * fsw ≃ Eon_D * fsw  -> body diode
@@ -75,7 +75,7 @@ class mosfet():
         return Psw_M + Psw_D
 
 
-    def Pl(this, ) -> dict:
+    def Pl(this) -> dict:
         """ Pl = Pc + Psw + Pb ≈ Pc + Psw """
         return this.Pc + this.Psw
 
@@ -226,7 +226,7 @@ if __name__ == '__main__':
         tri = 350e-9,
         tfi = 300e-9,
         Qrr = 0.38e-6,
-        Rds_on = 2.3e-3*1.2*1,
+        Rds_on = 2.3e-3*1.6*2.35,
         converter = c
     )
 
