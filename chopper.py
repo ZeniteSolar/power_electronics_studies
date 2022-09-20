@@ -50,6 +50,7 @@ class mosfet():
 
     def Eon_M(this) -> float:
         """ Eon_M = Udd * ((Id_on * (tri + tfu) / 2) + Qrr) """
+        print(this.tru, this.tfu)
         return this.converter.Udd * ((this.converter.Id_on * (this.tri + this.tfu) / 2) + this.Qrr)
 
 
@@ -88,7 +89,7 @@ class mosfet():
         pprint(this.as_dict())
 
 
-    def __init__(this, Rds_on, Cgd1, Cgd2, Rg_on, Rg_off, Qrr, Udr, Uplateau, tri, tfi, converter):
+    def __init__(this, Rds_on, Cgd1, Cgd2, Rg_on, Rg_off, Qrr, Udr, Uplateau, tri, tfi, tru, tfu, converter):
         this.Rds_on = Rds_on
 
         this.Cgd1 = Cgd1
@@ -105,9 +106,12 @@ class mosfet():
 
         this.tri = tri
         this.tfi = tfi
-        this.tru = this.tru()
 
-        this.tfu = this.tfu()
+        this.tru = tru
+        this.tfu = tfu
+
+        # this.tru = this.tru()
+        # this.tfu = this.tfu()
 
         this.Pc = this.Pc()
         this.Psw = this.Psw()
@@ -223,8 +227,10 @@ if __name__ == '__main__':
         Rg_on = 10+1.4,
         Rg_off = 3.14+1.4,
         Udr = 15,
-        tri = 350e-9,
-        tfi = 300e-9,
+        tri = 355e-9,
+        tfi = 350e-9,
+        tru = 355e-9,
+        tfu = 350e-9,
         Qrr = 0.38e-6,
         Rds_on = 2.3e-3*1.6*2.35,
         converter = c
@@ -236,6 +242,18 @@ if __name__ == '__main__':
 
     _Po = Pi-(2*ixfn420n10t.Pl)
 
-    _Psw = 2 * Io * Vo * fsw * (291.9 + 595.8) * 1e-9 / 2
+
+    tr = 355e-9
+    tf = 350e-9
+    td_on = 500e-9
+    td_off = 360e-9
+    Rds_on = 2.3e-3 * 1.6 * 2.35
+    D = Vo / Vi
+
+    _Psw = 2 * Io * Vo * fsw * (tr+tf+td_on+td_off) / 2
+    _Pc = Rds_on * D * Io**2
+    _Pt = _Psw + _Pc
     print(f'_Psw = {_Psw}')
+    print(f'_Psw = {_Pc}')
+    print(f'_Pt = {_Pt}, {ixfn420n10t.Pl}')
     print(f'Eff: {Po/Pi}, {_Po/Pi}, {_Po-Po}')
